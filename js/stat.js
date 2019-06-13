@@ -12,11 +12,12 @@ var FONT_GAP = 5;
 var BAR_WIDTH = 40;
 var NOTE_HEIGHT = FONT_SIZE * 2 + FONT_GAP;
 var MAX_BAR_HEIGHT = 150;
+var PLAYER_NAME_Y = CLOUD_Y + INNER_GAP + NOTE_HEIGHT + FONT_GAP + FONT_SIZE + MAX_BAR_HEIGHT + FONT_GAP + FONT_SIZE;
 
 var renderNote = function (ctx) {
   ctx.font = '16px PT Mono';
   ctx.textBaseline = 'hanging';
-  ctx.fillText('Ура, вы победили', CLOUD_X + INNER_GAP, CLOUD_Y + INNER_GAP);
+  ctx.fillText('Ура вы победили!', CLOUD_X + INNER_GAP, CLOUD_Y + INNER_GAP);
   ctx.fillText('Список результатов:', CLOUD_X + INNER_GAP, CLOUD_Y + INNER_GAP + FONT_SIZE + FONT_GAP);
 };
 
@@ -24,7 +25,6 @@ var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
-
 
 var getMaxElement = function (arr) {
   var maxElement = arr[0];
@@ -47,23 +47,31 @@ var renderColorfulText = function (ctx, text, x, y, color) {
   ctx.fillText(text, x, y);
 };
 
-var getRandomBlueColor = function () {
-  var randomSaturation = Math.floor(Math.random() * 100);
-  return 'hsl(230, ' + randomSaturation + '%, 50%)';
+// var getRandomBlueColor = function () {
+//   var randomSaturation = Math.floor(Math.random() * 100);
+//   return 'hsl(230, ' + randomSaturation + '%, 50%)';
+// };
+
+var getPlayerColor = function (playerName) {
+  if (playerName === 'Вы') {
+    return 'rgba(255, 0, 0, 1)';
+  } else {
+    // return getRandomBlueColor();
+    var randomSaturation = Math.floor(Math.random() * 100);
+    return 'hsl(230, ' + randomSaturation + '%, 50%)';
+  }
 };
 
-window.renderStatistics = function (ctx, players, times) {
+window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
   var maxTime = getMaxElement(times);
 
-  // console.log(players, times);
+  // console.log(names, times);
 
-  var PLAYER_NAME_Y = CLOUD_Y + INNER_GAP + NOTE_HEIGHT + FONT_GAP + FONT_SIZE + MAX_BAR_HEIGHT + FONT_GAP + FONT_SIZE;
-
-  for (var i = 0; i < players.length; i++) {
-    var playerName = players[i];
+  for (var i = 0; i < names.length; i++) {
+    var playerName = names[i];
     var playerTime = Math.floor(times[i]);
 
     var barHeight = (MAX_BAR_HEIGHT * times[i]) / maxTime;
@@ -72,11 +80,7 @@ window.renderStatistics = function (ctx, players, times) {
 
     var timeY = barY - FONT_GAP;
 
-    // Задаем цвет столбца
-    var barColor = 'rgba(255, 0, 0, 1)';
-    if (playerName !== 'Вы') {
-      barColor = getRandomBlueColor();
-    }
+    var barColor = getPlayerColor(playerName);
 
     renderColorfulText(ctx, playerTime, barX, timeY, 'black');
     renderColorfulRect(ctx, barX, barY, BAR_WIDTH, barHeight, barColor);
