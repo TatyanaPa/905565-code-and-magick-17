@@ -47,16 +47,10 @@ var renderColorfulText = function (ctx, text, x, y, color) {
   ctx.fillText(text, x, y);
 };
 
-// var getRandomBlueColor = function () {
-//   var randomSaturation = Math.floor(Math.random() * 100);
-//   return 'hsl(230, ' + randomSaturation + '%, 50%)';
-// };
-
 var getPlayerColor = function (playerName) {
   if (playerName === 'Вы') {
     return 'rgba(255, 0, 0, 1)';
   } else {
-    // return getRandomBlueColor();
     var randomSaturation = Math.floor(Math.random() * 100);
     return 'hsl(230, ' + randomSaturation + '%, 50%)';
   }
